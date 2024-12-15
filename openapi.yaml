@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: art_api
+  description: API to manage the art database
+  contact:
+    name: Ramiro Storni
+paths:
+  '/art_objects':
+    get: 
+      description: lists all art '/art_objects
+      responses:
+        200: 
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+
+#   '/auctions':
+#     get:
+#   '/auction_items':
+#     get:
+#   '/bids'
+#     get:
+  
+# components:
+#   schemas:
+#   parameters:
+#   responces:
