@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.db import schema, engine
-from app.routes import router
+from app.db import model, engine
+from app.api.routes import router
 
 # Create FastAPI app
 app = FastAPI()
@@ -11,7 +11,7 @@ app.include_router(router)
 # Function to initialize the database
 def init_db():
     print("Initializing the database...")
-    schema.Base.metadata.create_all(bind=engine)
+    model.Base.metadata.create_all(bind=engine)
     print("Database initialized!")
 
 # Main function
