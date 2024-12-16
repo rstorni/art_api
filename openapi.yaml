@@ -6,20 +6,54 @@ info:
   contact:
     name: Ramiro Storni
 paths:
-  '/art_object/{art_object_id}':
+  # ARTWORKS
+  '/artworks':
+    get:
+      responses:
+        '200':
+          $ref: '#/components/responses/get_artworks_200'
+  '/artwork/{artwork_id}':
     get:
       parameters:
-      - $ref: '#/components/parameters/path_art_object_id'
+      - $ref: '#/components/parameters/path_artwork_id'
       responses:
-        200:
-          $ref: '#/components/responces/get_art_object_200'
-  '/auctions/{auction_id}':
+        '200':
+          $ref: '#/components/responses/get_artwork_200'
+  # AUCTIONS
+  '/auctions':
+    get:
+      responses:
+        '200':
+          $ref: '#/components/responses/get_auctions_200'
+  '/auction/{auction_id}':
     get:
       parameters:
         - $ref: '#/components/parameters/path_auction_id'
       responses:
-        200:
-          $ref: '#/components/responces/get_auction_200'
+        '200':
+          $ref: '#/components/responses/get_auction_200'
+  # AUCTION ITEMS
+  '/auction_items/{auction_id}':
+    get:
+      parameters:
+        - $ref: '#/components/parameters/path_auction_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/get_auction_items_200'
+  '/auction_item/{auction_id}/{auction_item_id}':
+    get:
+      parameters:
+        - $ref: '#/components/parameters/path_auction_id'
+        - $ref: '#/components/parameters/path_auction_item_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/get_auction_item_200'
+  # BIDS
+  '/bids':
+    get:
+      responses:
+        '200': 
+          $ref: '#/components/responses/get_bids_200'
 components:
   schemas:
     # General Schemas
@@ -47,11 +81,11 @@ components:
         - approved
         - declined
     # Art Object Schemas
-    art_object:
+    artwork:
       type: object
       description: art object properties
       properties:
-        art_object_id:
+        artwork_id:
           $ref: '#/components/schemas/id'
         name:
           $ref: '#/components/schemas/name'
@@ -74,8 +108,13 @@ components:
           $ref: '#/components/schemas/details'
           default: Unknown
       required:
-        - art_object_id
+        - artwork_id
         - name
+    artwork_list:
+      type: array
+      description: A list of Artworks
+      items:
+        $ref: '#/components/schemas/artwork'
     # Auction Schemas
     auction:
       type: object
@@ -99,16 +138,21 @@ components:
         - auction_id
         - start_datetime
         - end_datetime
+    auction_list:
+      type: array
+      description: A list of auctions.
+      items:
+        $ref: '#/components/schemas/auction'
     # Auction Item
     auction_item:
       type: object
       description: Artworks in an auction
-      parameters:
+      properties:
         auction_item_id:
           $ref: '#/components/schemas/id'
         auction_id:
           $ref: '#/components/schemas/id'
-        art_object_id:
+        artwork_id:
           $ref: '#/components/schemas/id'
         name:
           $ref: '#/components/schemas/name'
@@ -116,11 +160,16 @@ components:
           $ref: '#/components/schemas/details'
         starting_bid:
           $ref: '#/components/schemas/bid_value'
+    auction_item_list:
+      type: array
+      description: A list of auction items.
+      items:
+        $ref: '#/components/schemas/auction_item'
     # Bids
     bid:
       type: object
       description: Object describing a bid
-      parameters:
+      properties:
         bid_id:
           $ref: '#/components/schemas/id'
         user_id:
@@ -130,13 +179,18 @@ components:
         bid_timestamp:
           $ref: '#/components/schemas/datetime'
         status:
-          $ref: '#/components/schemas/bid_value'
-        bid_amount:
           $ref: '#/components/schemas/bid_status'
+        bid_amount:
+          $ref: '#/components/schemas/bid_value'
+    bid_list:
+      type: array
+      description: A list of bids.
+      items:
+        $ref: '#/components/schemas/bid'  
   parameters:
     # Art Object
-    path_art_object_id:
-      name: art_object_id
+    path_artwork_id:
+      name: artwork_id
       in: path
       required: true
       schema: 
@@ -148,18 +202,57 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/id'
-  responces:
+    # Auction Item
+    path_auction_item_id:
+      name: auction_item_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/id'
+  responses:
     # Art Object
-    get_art_object_200:
+    get_artworks_200:
+      description: Successfuly returned a list of Artworks.
+      content: 
+        application/json:
+          schema:
+            $ref: '#/components/schemas/artwork_list'
+    get_artwork_200:
       description: Successfuly returned information about an art object.
       content:
         application/json:
           schema: 
-            $ref: '#/components/schemas/art_object'
+            $ref: '#/components/schemas/artwork'
     # Auction
+    get_auctions_200:
+      description: Successfuly returned a list of auctions.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/auction_list'
     get_auction_200:
       description: Successfuly returned information about an auction.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/auction'
+    # Auction Items
+    get_auction_items_200:
+      description: Successfuly returned a list of auction items given an auction id.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/auction_item_list'
+    get_auction_item_200:
+      description: Successfuly return an auction item given an auction and its id.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/auction_item'
+    # Bids
+    get_bids_200:
+      description: Successfuly returned a list of bids
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/bid_list'
