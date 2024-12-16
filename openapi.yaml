@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   version: 0.0.1
   title: art_api
@@ -6,25 +6,160 @@ info:
   contact:
     name: Ramiro Storni
 paths:
-  '/art_objects':
-    get: 
-      description: lists all art '/art_objects
+  '/art_object/{art_object_id}':
+    get:
+      parameters:
+      - $ref: '#/components/parameters/path_art_object_id'
       responses:
-        200: 
-          description: success
-          content:
-            application/json:
-              schema:
-                type: string
-
-#   '/auctions':
-#     get:
-#   '/auction_items':
-#     get:
-#   '/bids'
-#     get:
-  
-# components:
-#   schemas:
-#   parameters:
-#   responces:
+        200:
+          $ref: '#/components/responces/get_art_object_200'
+  '/auctions/{auction_id}':
+    get:
+      parameters:
+        - $ref: '#/components/parameters/path_auction_id'
+      responses:
+        200:
+          $ref: '#/components/responces/get_auction_200'
+components:
+  schemas:
+    # General Schemas
+    id:
+      type: string
+      description: UUID for a resource
+      example: 123e4567-e89b-12d3-a456-426614174000
+    name:
+      type: string
+      description: The humman readable name or tile associated with an object.
+    details:
+      type: string
+      description: Additional details associated with an object.
+    datetime:
+      type: string
+      format: date-time
+      description: Date and time associated with some event.
+    bid_value:
+      type: integer
+      description: Represents a monetary bid value.
+      example: 3000
+    bid_status:
+      type: string
+      enum: 
+        - approved
+        - declined
+    # Art Object Schemas
+    art_object:
+      type: object
+      description: art object properties
+      properties:
+        art_object_id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+          example: little walter's toys
+        details:
+          $ref: '#/components/schemas/details'
+          example: Pre-WWI still life painting of Aguste Macke's son's toys. 
+        artist:
+          $ref: '#/components/schemas/name'
+          example: Aguste Macke
+          default: Unknown
+        creation_date:
+          $ref: '#/components/schemas/datetime'
+          example: 1912-01-01
+        medium:
+          $ref: '#/components/schemas/details'
+          example: oil on canvas
+          default: Unknown
+        dimentions:
+          $ref: '#/components/schemas/details'
+          default: Unknown
+      required:
+        - art_object_id
+        - name
+    # Auction Schemas
+    auction:
+      type: object
+      description: auction properties
+      properties:
+        auction_id:
+          $ref: '#/components/schemas/id'
+        title:
+          $ref: '#/components/schemas/name'
+          example: Pre-WWI Art - Storni Collection
+        details:
+          $ref: '#/components/schemas/details'
+          example: The best Pre-WWI paintings and sculptures from the Storni collecton.
+        start_datetime:
+          $ref: '#/components/schemas/datetime'
+          example: 2024-12-16T12:45:00Z
+        end_datetime:
+          $ref: '#/components/schemas/datetime'
+          example: 2024-12-25T12:45:00Z
+      required:
+        - auction_id
+        - start_datetime
+        - end_datetime
+    # Auction Item
+    auction_item:
+      type: object
+      description: Artworks in an auction
+      parameters:
+        auction_item_id:
+          $ref: '#/components/schemas/id'
+        auction_id:
+          $ref: '#/components/schemas/id'
+        art_object_id:
+          $ref: '#/components/schemas/id'
+        name:
+          $ref: '#/components/schemas/name'
+        details:
+          $ref: '#/components/schemas/details'
+        starting_bid:
+          $ref: '#/components/schemas/bid_value'
+    # Bids
+    bid:
+      type: object
+      description: Object describing a bid
+      parameters:
+        bid_id:
+          $ref: '#/components/schemas/id'
+        user_id:
+          $ref: '#/components/schemas/id'
+        acution_item_id:
+          $ref: '#/components/schemas/id'
+        bid_timestamp:
+          $ref: '#/components/schemas/datetime'
+        status:
+          $ref: '#/components/schemas/bid_value'
+        bid_amount:
+          $ref: '#/components/schemas/bid_status'
+  parameters:
+    # Art Object
+    path_art_object_id:
+      name: art_object_id
+      in: path
+      required: true
+      schema: 
+        $ref: '#/components/schemas/id'
+    # Auction
+    path_auction_id:
+      name: auction_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/id'
+  responces:
+    # Art Object
+    get_art_object_200:
+      description: Successfuly returned information about an art object.
+      content:
+        application/json:
+          schema: 
+            $ref: '#/components/schemas/art_object'
+    # Auction
+    get_auction_200:
+      description: Successfuly returned information about an auction.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/auction'
