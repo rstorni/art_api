@@ -6,6 +6,32 @@ info:
   contact:
     name: Ramiro Storni
 paths:
+  # USERS
+  '/users':
+    get:
+      responses:
+        '200':
+          $ref: '#/components/responses/get_users_200'
+  '/user/{user_id}':
+    get:
+      parameters:
+        - $ref: '#/components/parameters/path_user_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/get_user_200'
+  '/create_user':
+    post:
+      description: creates a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create_user'
+      responses:
+        '200':
+          $ref: '#/components/responses/get_user_200'
+
   # ARTWORKS
   '/artworks':
     get:
@@ -15,7 +41,7 @@ paths:
   '/artwork/{artwork_id}':
     get:
       parameters:
-      - $ref: '#/components/parameters/path_artwork_id'
+        - $ref: '#/components/parameters/path_artwork_id'
       responses:
         '200':
           $ref: '#/components/responses/get_artwork_200'
@@ -80,6 +106,52 @@ components:
       enum: 
         - approved
         - declined
+    # User
+    user:
+      type: object
+      description: user data model
+      properties:
+        user_id:
+          $ref: '#/components/schemas/id'
+        username:
+          $ref: '#/components/schemas/name'
+        password:
+          $ref: '#/components/schemas/name'
+        first_name:
+          $ref: '#/components/schemas/name'
+        last_name:
+          $ref: '#/components/schemas/name'
+        email:
+          $ref: '#/components/schemas/name'
+        registration_date:
+          $ref: '#/components/schemas/datetime'
+        updated_date:
+          $ref: '#/components/schemas/datetime'
+    user_list:
+      type: array
+      description: list of users 
+      items:
+        $ref: '#/components/schemas/user'
+    create_user:
+      type: object
+      description: data model for creating a user
+      properties: 
+        username:
+          $ref: '#/components/schemas/name'
+        password:
+          $ref: '#/components/schemas/name'
+        first_name:
+          $ref: '#/components/schemas/name'
+        last_name:
+          $ref: '#/components/schemas/name'
+        email:
+          $ref: '#/components/schemas/name'
+      required:
+        - username
+        - password
+        - first_name
+        - last_name
+        - email
     # Art Object Schemas
     artwork:
       type: object
@@ -188,6 +260,13 @@ components:
       items:
         $ref: '#/components/schemas/bid'  
   parameters:
+    # User
+    path_user_id:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/id'
     # Art Object
     path_artwork_id:
       name: artwork_id
@@ -210,6 +289,19 @@ components:
       schema:
         $ref: '#/components/schemas/id'
   responses:
+    # User
+    get_users_200:
+      description: Successfuly return a list of users
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user_list'
+    get_user_200:
+      description: Successfuly return a user
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'
     # Art Object
     get_artworks_200:
       description: Successfuly returned a list of Artworks.
