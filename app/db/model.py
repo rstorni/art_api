@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import date, datetime
+from uuid import UUID, uuid4
+from typing import Optional
 
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -6,8 +8,27 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 class Base(DeclarativeBase):
     pass
 
+# class Status(enum.Enum):
+#     PENDING = "pending"
+#     RECEIVED = "received"
+#     COMPLETED = "completed"
+
+class User(Base):
+    __tablename__ = 'users'
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    username: Mapped[str] = mapped_column(String(100))
+    password: Mapped[str] = mapped_column(String(255))
+    first_name: Mapped[Optional[str]] = mapped_column(String(100))
+    last_name: Mapped[Optional[str]] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(100))
+    registration_date: Mapped[datetime] = mapped_column()
+    updated_date: Mapped[datetime] = mapped_column()
+
+    def __repr__(self) -> str:
+        return f"User Id: {self.id}, Name: {self.first_name} {self.last_name}"
+
 class ArtObject(Base):
-    __tablename__ = "art_object"
+    __tablename__ = "art_objects"
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(30))
     artist: Mapped[str] = mapped_column(String(30))
@@ -18,15 +39,5 @@ class ArtObject(Base):
     def __repr__(self) -> str:
         return f"Art Object Id: {self.id}, Title: {self.title}"
 
-class Artist(Base):
-    __tablename__ = "artist"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(20))
-    date_of_birth: Mapped[date] = mapped_column()
-    date_of_death: Mapped[date] = mapped_column()
-    country: Mapped[str] = mapped_column(String(20))
-
-    def __repr__(self) -> str:
-        return f"Artist ID: {self.id}, Artist Name: {self.name}"
 
     

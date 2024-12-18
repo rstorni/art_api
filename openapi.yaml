@@ -31,7 +31,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/get_user_200'
-
   # ARTWORKS
   '/artworks':
     get:

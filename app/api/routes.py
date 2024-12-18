@@ -1,7 +1,10 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.db import get_db, model
+# from app.api.schemas import User
 
 router = APIRouter()
 
@@ -9,6 +12,21 @@ router = APIRouter()
 @router.get('/')
 def index():
     return 'hello world'
+
+# User
+@router.get('/users')
+def getUsers(db: Session = Depends(get_db)):
+    pass
+
+@router.get('/user/{user_id}')
+def getUser(user_id: str, db: Session = Depends(get_db)):
+    dbItem = db.query(model.User).where(id==user_id)
+    print(dbItem.__repr__())
+    return dbItem
+
+@router.post('/create_user')
+def createUser(db: Session = Depends(get_db)):
+    pass
 
 #Art Ojects
 @router.get('/art_objects')
