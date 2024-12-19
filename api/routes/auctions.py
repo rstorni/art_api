@@ -1,19 +1,17 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 
-from db import get_db
 
 router = APIRouter()
 
 
 @router.get('/auctions')
-def read_auctions(db: Session = Depends(get_db)):
+def read_auctions():
     pass
 
 @router.get('/auctions/{auction_id}')
-def read_auction(db: Session = Depends(get_db)):
+def read_auction():
     pass
 
 @router.post('/create_auction')
-def create_auction(db: Session = Depends(get_db)):
+def create_auction():
     pass

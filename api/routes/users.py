@@ -1,24 +1,28 @@
+from uuid import UUID
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from db import get_db
-from api.schemas.users import User
+from db.db_setup import get_db
+from validation_schemas.users import UserCreate, User
+from api.utils.users import create_user, get_user, get_users
 
 router = APIRouter()
 
-list_users = []
-
 @router.get('/users', response_model=List[User])
 def getUsers(db: Session = Depends(get_db)):
-    return list_users
+    users = get_users(db)
+    return users
 
-@router.post('/create_user')
-def createUser(user: User, db: Session = Depends(get_db)):
-    list_users.append(user)
-    return user
+@router.post('/create_user', response_model=User)
+def createUser(user: UserCreate, db: Session = Depends(get_db)):
+    new_user = create_user(db, user)
+    return new_user
 
 @router.get('/user/{user_id}', response_model=User)
-def getUser(user_id: str, db: Session = Depends(get_db)):
-    pass
+def getUser(user_id: UUID, db: Session = Depends(get_db)):
+    user = get_user(db, user_id=user_id)
+    if user is None:
+        HTTPException(404, detail=f"user with id {user_id} not found")
+    return user
