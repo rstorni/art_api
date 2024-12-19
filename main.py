@@ -1,12 +1,17 @@
 from fastapi import FastAPI
-from app.db import model, engine
-from app.api.routes import router
+from api.routes import auctions
+from db import model, engine
+from api.routes import users, auctions
 
 # Create FastAPI app
-app = FastAPI()
+app = FastAPI(
+        title='Art API',
+        description='Api for managing art auction data'
+)
 
 # Include routes
-app.include_router(router)
+app.include_router(users.router)
+app.include_router(auctions.router)
 
 # Function to initialize the database
 def init_db():
