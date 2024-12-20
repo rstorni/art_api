@@ -2,9 +2,12 @@ from fastapi import FastAPI
 
 from api.routes import users, auctions
 from db.db_setup import engine
-from db.models import user
+from db.models import user, auction
+
 
 user.Base.metadata.create_all(bind=engine)
+auction.Base.metadata.create_all(bind=engine)
+
 
 # Create FastAPI app
 app = FastAPI(
