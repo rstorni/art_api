@@ -3,12 +3,13 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from db.models._model_constants import STANDARD_LENGTH, DETAILS_LENGTH
 from db.db_setup import Base
 from db.models._mixins import Timestamp
+from db.models.artwork import Artwork
 
 class Artwork(Timestamp, Base):
     __tablename__ = 'artworks'
@@ -19,6 +20,7 @@ class Artwork(Timestamp, Base):
     medium: Mapped[str] = mapped_column(String(STANDARD_LENGTH))
     details:Mapped[Optional[str]] = mapped_column(String(DETAILS_LENGTH))
     fabricated_date: Mapped[Optional[datetime]] = mapped_column()
+    lot: Mapped[Artwork] = relationship("Lot", back_populates='artwork')
 
 
     def __repr__(self) -> str:

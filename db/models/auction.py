@@ -1,13 +1,15 @@
 from uuid import UUID
+from typing import List
 from datetime import datetime
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from db.models._model_constants import STANDARD_LENGTH, DETAILS_LENGTH
 from db.db_setup import Base
 from db.models._mixins import Timestamp
+from db.models.lot import Lot
 
 class Auction(Timestamp, Base):
     __tablename__ = 'auctions'
@@ -17,6 +19,8 @@ class Auction(Timestamp, Base):
     details: Mapped[str] = mapped_column(String(DETAILS_LENGTH))
     start_date: Mapped[datetime] = mapped_column()
     end_date: Mapped[datetime] = mapped_column()
+    lot: Mapped[List[Lot]] = relationship("Lot", back_populates='auction')
+
 
     def __repr__(self) -> str:
         return f"Auction ID: {self.auction_id}, Auction Name: {self.name}"

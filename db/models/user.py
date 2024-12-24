@@ -1,13 +1,14 @@
 from uuid import UUID
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from db.models._model_constants import STANDARD_LENGTH, PASSWORD_LENTH
 from db.db_setup import Base
 from db.models._mixins import Timestamp
+from db.models.bid import Bid
 
 class User(Timestamp, Base):
     __tablename__ = 'users'
@@ -19,6 +20,8 @@ class User(Timestamp, Base):
     last_name: Mapped[Optional[str]] = mapped_column(String(STANDARD_LENGTH))
     email: Mapped[str] = mapped_column(String(STANDARD_LENGTH))
     is_active: Mapped[bool] = mapped_column()
+
+    bids: Mapped[List[Bid]] = relationship("Bid", back_populates="user")
 
     def __repr__(self) -> str:
         return f"User Id: {self.id}, Name: {self.first_name} {self.last_name}"
