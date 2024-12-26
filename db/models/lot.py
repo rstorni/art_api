@@ -14,8 +14,8 @@ class Lot(Timestamp, Base):
     auction_id: Mapped[UUID] = mapped_column(ForeignKey('auctions.auction_id'))
     # artwork_id: Mapped[UUID] = mapped_column(ForeignKey('artworks.artwork_id'))
     
-    auction = relationship("Auction", back_populates="lot")
-    artwork = relationship("Artwork", back_populates="lots")
+    auction: Mapped["Auction"] = relationship("Auction", back_populates="lot")
+    # artwork = relationship("Artwork", back_populates="lot")
 
 
 

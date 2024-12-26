@@ -13,6 +13,7 @@ class Bid(Timestamp, Base):
 
     bid_id: Mapped[UUID] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey('users.id'))
+    lot_id: Mapped[UUID] = mapped_column(ForeignKey('lots.lot_id'))
     amount: Mapped[int] = mapped_column()
 
 

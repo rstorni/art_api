@@ -11,17 +11,16 @@ from api.utils.users import create_user, get_user, get_users
 router = APIRouter()
 
 @router.get('/users', response_model=List[User])
-def getUsers(db: Session = Depends(get_db)):
-    users = get_users(db)
-    return users
+def readUsers(db: Session = Depends(get_db)):
+    return get_users(db)
 
 @router.post('/create_user', response_model=User)
 def createUser(user: UserCreate, db: Session = Depends(get_db)):
-    new_user = create_user(db, user)
-    return new_user
+    user = create_user(db, user)
+    return user
 
 @router.get('/user/{user_id}', response_model=User)
-def getUser(user_id: UUID, db: Session = Depends(get_db)):
+def readUser(user_id: UUID, db: Session = Depends(get_db)):
     user = get_user(db, user_id=user_id)
     if user is None:
         HTTPException(404, detail=f"user with id {user_id} not found")
