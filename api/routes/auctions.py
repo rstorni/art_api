@@ -1,19 +1,29 @@
-from fastapi import APIRouter, Depends
+from typing import List
+from uuid import UUID
+
+from fastapi import APIRouter,  Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from db import get_db
+from db.db_setup import get_db
+from validation_schemas.auctions import Auction, AuctionCreate
+from api.utils.auctions import create_auction, get_auction, get_auctions
+
 
 router = APIRouter()
 
+@router.get('/auctions', response_model=List[Auction])
+def readAuctions(db: Session = Depends(get_db)):
+    return get_auctions(db)
 
-@router.get('/auctions')
-def read_auctions(db: Session = Depends(get_db)):
-    pass
 
-@router.get('/auctions/{auction_id}')
-def read_auction(db: Session = Depends(get_db)):
-    pass
+@router.get('/auctions/{auction_id}', response_model=Auction)
+def readAuction(auction_id: UUID, db: Session = Depends(get_db)):
+    auction = get_auction(db, auction_id=auction_id)
+    if auction is None:
+        HTTPException(404, detail=f"auction with id {auction_id} not found")
+    return auction
+
 
 @router.post('/create_auction')
-def create_auction(db: Session = Depends(get_db)):
-    pass
+def createAuction(auction: AuctionCreate, db: Session = Depends(get_db)):
+    return create_auction(db, auction)
