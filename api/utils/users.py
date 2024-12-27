@@ -11,15 +11,14 @@ def get_users(db: Session):
     return db.query(db_UserClass).all()
 
 def create_user(db: Session, user: UserCreate):
-    username = user.username
-    password = user.password
-    first_name = user.first_name
-    last_name = user.last_name
-    email = user.email
-    is_active = user.is_active
+    
     db_user = db_UserClass(
-        username = username, password = password, first_name = first_name, 
-        last_name = last_name, email = email, is_active = is_active
+        username = user.username, 
+        password = user.password, 
+        first_name = user.first_name, 
+        last_name = user.last_name, 
+        email = user.email, 
+        is_active =  user.is_active
         )
     
     db.add(db_user)

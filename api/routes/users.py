@@ -16,8 +16,7 @@ def readUsers(db: Session = Depends(get_db)):
 
 @router.post('/create_user', response_model=User)
 def createUser(user: UserCreate, db: Session = Depends(get_db)):
-    user = create_user(db, user)
-    return user
+    return create_user(db, user)
 
 @router.get('/user/{user_id}', response_model=User)
 def readUser(user_id: UUID, db: Session = Depends(get_db)):
