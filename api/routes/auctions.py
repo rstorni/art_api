@@ -24,6 +24,6 @@ def readAuction(auction_id: UUID, db: Session = Depends(get_db)):
     return auction
 
 
-@router.post('/create_auction')
+@router.post('/create_auction', response_model=Auction)
 def createAuction(auction: AuctionCreate, db: Session = Depends(get_db)):
     return create_auction(db, auction)

@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class BidBase(BaseModel):
     user_id: UUID 
-    # lot_id: UUID = Field()
+    lot_id: UUID 
     amount: int = Field(gt=0)
 
 class BidCreate(BidBase):
