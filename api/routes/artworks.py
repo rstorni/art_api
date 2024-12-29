@@ -15,7 +15,7 @@ router = APIRouter()
 def readArtworks(db: Session = Depends(get_db)):
     return get_artworks(db)
 
-@router.get('/artworks/{artwork_id}', response_model=Artwork)
+@router.get('/artwork/{artwork_id}', response_model=Artwork)
 def readArtwork(artwork_id: UUID, db: Session = Depends(get_db)):
     artwork = get_artwork(db, artwork_id=artwork_id)
     if artwork is None:

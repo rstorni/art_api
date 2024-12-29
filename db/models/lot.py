@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, backref
 from sqlalchemy.sql import func
 
 from db.db_setup import Base
@@ -12,10 +12,11 @@ class Lot(Timestamp, Base):
 
     lot_id: Mapped[UUID] = mapped_column(primary_key=True, server_default=func.gen_random_uuid())
     auction_id: Mapped[UUID] = mapped_column(ForeignKey('auctions.auction_id'))
-    artwork_id: Mapped[UUID] = mapped_column(ForeignKey('artworks.artwork_id'))
+    artwork_id: Mapped[UUID] = mapped_column(ForeignKey('artworks.artwork_id'), unique=True)
     low_estimate_price: Mapped[int] = mapped_column()
     high_estimate_price: Mapped[int] = mapped_column()
     
+    artwork = relationship('Artwork', backref=backref("lots", uselist=False))
     # auction: Mapped["Auction"] = relationship("Auction", back_populates="lot")
     # artwork = relationship("Artwork", back_populates="lot")
 

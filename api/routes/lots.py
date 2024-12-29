@@ -16,7 +16,7 @@ def readLots(db: Session = Depends(get_db)):
     return get_lots(db)
 
 
-@router.get('/lots/{lot_id}', response_model=Lot)
+@router.get('/lot/{lot_id}', response_model=Lot)
 def readLot(lot_id: UUID, db: Session = Depends(get_db)):
     lot = get_lot(db, lot_id)
     if lot is None:
