@@ -12,8 +12,8 @@ router = APIRouter()
 
 
 @router.get('/lots', response_model=List[Lot])
-def readLots(db: Session = Depends(get_db)):
-    return get_lots(db)
+def readLots(auction_id: UUID = None, db: Session = Depends(get_db)):
+    return get_lots(db, auction_id)
 
 
 @router.get('/lot/{lot_id}', response_model=Lot)

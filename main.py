@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import artworks, auctions, bids, lots, users
 from db.db_setup import engine
@@ -14,6 +15,16 @@ lot.Base.metadata.create_all(bind=engine)
 app = FastAPI(
         title='Art API',
         description='Api for managing art auction data'
+)
+
+origins = []
+
+app.add_middleware(
+    CORSMiddleware, 
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
 )
 
 # Include routes

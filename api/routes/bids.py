@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -12,8 +12,8 @@ router = APIRouter()
 
 
 @router.get('/bids', response_model=List[Bid])
-def readBids(db: Session = Depends(get_db)):
-    return get_bids(db)
+def readBids(lot_id: UUID = None, db: Session = Depends(get_db)):
+    return get_bids(db, lot_id)
 
 @router.get('/bids/{bid_id}', response_model=Bid)
 def readBid(bid_id: UUID, db: Session = Depends(get_db)):
