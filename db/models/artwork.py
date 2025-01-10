@@ -20,9 +20,6 @@ class Artwork(Timestamp, Base):
     details:Mapped[Optional[str]] = mapped_column(String(DETAILS_LENGTH))
     fabricated_date: Mapped[Optional[datetime]] = mapped_column()
 
-    # Relationships
-    # lot: Mapped["Lot"] = relationship("Lot", back_populates='artwork')
-
 
     def __repr__(self) -> str:
         return f"Artwork Id: {self.artwork_id}, Title: {self.title}, Artist: {self.artist}"

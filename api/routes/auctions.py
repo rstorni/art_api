@@ -16,7 +16,7 @@ def readAuctions(db: Session = Depends(get_db)):
     return get_auctions(db)
 
 
-@router.get('/auctions/{auction_id}', response_model=Auction)
+@router.get('/auction/{auction_id}', response_model=Auction)
 def readAuction(auction_id: UUID, db: Session = Depends(get_db)):
     auction = get_auction(db, auction_id=auction_id)
     if auction is None:
@@ -24,6 +24,6 @@ def readAuction(auction_id: UUID, db: Session = Depends(get_db)):
     return auction
 
 
-@router.post('/create_auction')
+@router.post('/create_auction', response_model=Auction)
 def createAuction(auction: AuctionCreate, db: Session = Depends(get_db)):
     return create_auction(db, auction)
