@@ -7,6 +7,12 @@ from validation_schemas.users import UserCreate
 def get_user(db: Session, user_id: str):
     return db.query(db_UserClass).filter(db_UserClass.id == user_id).first()
 
+def delete_user(db: Session, user_id: str):
+    user = db.query(db_UserClass).filter(db_UserClass.id == user_id).first()
+    db.delete(user)
+    db.commit()
+    return user
+
 def get_users(db: Session):
     return db.query(db_UserClass).all()
 
