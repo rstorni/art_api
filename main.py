@@ -17,7 +17,7 @@ app = FastAPI(
         description='Api for managing art auction data'
 )
 
-origins = []
+origins = ["http://localhost:5173"]
 
 app.add_middleware(
     CORSMiddleware, 
