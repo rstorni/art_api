@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from db.db_setup import get_db
 from validation_schemas.artworks import ArtworkCreate, Artwork
-from api.utils.artworks import create_artwork, get_artwork, get_artworks
+from api.utils.artworks import create_artwork, delete_artwork, get_artwork, get_artworks
 
 router = APIRouter()
 
@@ -18,6 +18,13 @@ def readArtworks(db: Session = Depends(get_db)):
 @router.get('/artwork/{artwork_id}', response_model=Artwork)
 def readArtwork(artwork_id: UUID, db: Session = Depends(get_db)):
     artwork = get_artwork(db, artwork_id=artwork_id)
+    if artwork is None:
+        HTTPException(404, detail=f"artwork with id {artwork_id} not found")
+    return artwork
+
+@router.delete('/artwork/{artwork_id}')
+def readArtwork(artwork_id: UUID, db: Session = Depends(get_db)):
+    artwork = delete_artwork(db, artwork_id=artwork_id)
     if artwork is None:
         HTTPException(404, detail=f"artwork with id {artwork_id} not found")
     return artwork

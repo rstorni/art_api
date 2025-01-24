@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from db.db_setup import get_db
 from validation_schemas.users import UserCreate, User
-from api.utils.users import create_user, get_user, get_users
+from api.utils.users import create_user, delete_user,  get_user, get_users
 
 router = APIRouter()
 
@@ -21,6 +21,13 @@ def createUser(user: UserCreate, db: Session = Depends(get_db)):
 @router.get('/user/{user_id}', response_model=User)
 def readUser(user_id: UUID, db: Session = Depends(get_db)):
     user = get_user(db, user_id=user_id)
+    if user is None:
+        HTTPException(404, detail=f"user with id {user_id} not found")
+    return user
+
+@router.delete('/user/{user_id}', response_model=User)
+def readUser(user_id: UUID, db: Session = Depends(get_db)):
+    user = delete_user(db, user_id=user_id)
     if user is None:
         HTTPException(404, detail=f"user with id {user_id} not found")
     return user

@@ -1,5 +1,8 @@
-from fastapi import FastAPI
+from typing import Annotated
+
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 
 from api.routes import artworks, auctions, bids, lots, users
 from db.db_setup import engine
@@ -10,6 +13,8 @@ artwork.Base.metadata.create_all(bind=engine)
 auction.Base.metadata.create_all(bind=engine)
 bid.Base.metadata.create_all(bind=engine)
 lot.Base.metadata.create_all(bind=engine)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Create FastAPI app
 app = FastAPI(
@@ -26,6 +31,8 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
+
 
 # Include routes
 app.include_router(users.router)

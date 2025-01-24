@@ -12,7 +12,7 @@ class Lot(Timestamp, Base):
 
     lot_id: Mapped[UUID] = mapped_column(primary_key=True, server_default=func.gen_random_uuid())
     auction_id: Mapped[UUID] = mapped_column(ForeignKey('auctions.auction_id'))
-    artwork_id: Mapped[UUID] = mapped_column(ForeignKey('artworks.artwork_id'), unique=True)
+    artwork_id: Mapped[UUID] = mapped_column(ForeignKey('artworks.artwork_id', ondelete='CASCADE'), unique=True)
     low_estimate_price: Mapped[int] = mapped_column()
     high_estimate_price: Mapped[int] = mapped_column()
     

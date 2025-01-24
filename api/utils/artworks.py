@@ -7,6 +7,12 @@ from validation_schemas.artworks import ArtworkCreate
 def get_artwork(db: Session, artwork_id: str):
     return db.query(db_ArtworkClass).filter(db_ArtworkClass.artwork_id == artwork_id).first()
 
+def delete_artwork(db: Session, artwork_id: str):
+    artwork = db.query(db_ArtworkClass).filter(db_ArtworkClass.artwork_id == artwork_id).first()
+    db.delete(artwork)
+    db.commit()
+    return artwork
+
 def get_artworks(db: Session):
     return db.query(db_ArtworkClass).all()
 
