@@ -9,6 +9,7 @@ from db.models._model_constants import STANDARD_LENGTH, PASSWORD_LENTH
 from db.db_setup import Base
 from db.models._mixins import Timestamp
 from db.models.bid import Bid
+from db.models.wallet import Wallet
 
 class User(Timestamp, Base):
     __tablename__ = 'users'
@@ -19,9 +20,10 @@ class User(Timestamp, Base):
     first_name: Mapped[Optional[str]] = mapped_column(String(STANDARD_LENGTH))
     last_name: Mapped[Optional[str]] = mapped_column(String(STANDARD_LENGTH))
     email: Mapped[str] = mapped_column(String(STANDARD_LENGTH))
-    is_active: Mapped[bool] = mapped_column()
+    is_active: Mapped[bool] = mapped_column(default=False)
 
     bids: Mapped[List[Bid]] = relationship("Bid", back_populates="user")
+    wallets: Mapped[Wallet] = relationship("Wallet", back_populates="user", uselist=False)
 
     def __repr__(self) -> str:
         return f"User Id: {self.id}, Name: {self.first_name} {self.last_name}"

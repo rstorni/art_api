@@ -4,15 +4,16 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 
-from api.routes import artworks, auctions, bids, lots, users
+from api.routes import artworks, auctions, bids, lots, users, wallets
 from db.db_setup import engine
-from db.models import artwork, auction, bid, lot, user
+from db.models import artwork, auction, bid, lot, user, wallet
 
 user.Base.metadata.create_all(bind=engine)
 artwork.Base.metadata.create_all(bind=engine)
 auction.Base.metadata.create_all(bind=engine)
 bid.Base.metadata.create_all(bind=engine)
 lot.Base.metadata.create_all(bind=engine)
+wallet.Base.metadata.create_all(bind=engine)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -40,3 +41,4 @@ app.include_router(artworks.router)
 app.include_router(auctions.router)
 app.include_router(bids.router)
 app.include_router(lots.router)
+app.include_router(wallets.router)

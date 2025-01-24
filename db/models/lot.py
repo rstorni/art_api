@@ -16,6 +16,7 @@ class Lot(Timestamp, Base):
     low_estimate_price: Mapped[int] = mapped_column()
     high_estimate_price: Mapped[int] = mapped_column()
     
+    
     artwork = relationship('Artwork', backref=backref("lots", uselist=False))
     # auction: Mapped["Auction"] = relationship("Auction", back_populates="lot")
     # artwork = relationship("Artwork", back_populates="lot")

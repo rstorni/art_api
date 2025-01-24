@@ -3,6 +3,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from db.models.bid import Bid as db_BidClass
+from db.models.wallet import Wallet as db_WalletClass
 from validation_schemas.bids import BidCreate
 
 def get_bid(db: Session, bid_id: str):
@@ -15,6 +16,13 @@ def get_bids(db: Session, lot_id: str = None):
         return db.query(db_BidClass).all()
     
 def create_bid(bid: BidCreate, db: Session):
+    wallet = db.query(db_WalletClass).filter(bid.user_id == db_WalletClass.user_id).first()
+    if not wallet:
+        raise ValueError('Not wallet found')
+    
+    if wallet.balance < bid.amount:
+        raise ValueError('not enough funds in the wallet')
+
     db_bid = db_BidClass(
         user_id = bid.user_id,
         lot_id = bid.lot_id,
