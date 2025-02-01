@@ -15,13 +15,8 @@ def get_bids(db: Session, lot_id: str = None):
     else:
         return db.query(db_BidClass).all()
     
-def create_bid(bid: BidCreate, db: Session):
-    wallet = db.query(db_WalletClass).filter(bid.user_id == db_WalletClass.user_id).first()
-    if not wallet:
-        raise ValueError('Not wallet found')
     
-    if wallet.balance < bid.amount:
-        raise ValueError('not enough funds in the wallet')
+def create_bid(bid: BidCreate, db: Session):
 
     db_bid = db_BidClass(
         user_id = bid.user_id,

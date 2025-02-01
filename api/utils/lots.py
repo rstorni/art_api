@@ -1,8 +1,21 @@
 from sqlalchemy.orm import Session
 
 from db.models.lot import Lot as db_LotClass
+from db.models.bid import Bid as db_BidClass
 from validation_schemas.lots import LotCreate
 
+# def get_highest_bid(db: Session, lot_id: str):
+#     lot = db.query(db_LotClass).filter(lot_id==db_LotClass.lot_id).first()
+
+#     if not lot:
+#         raise  ValueError(f"No lot with {lot_id} found.")
+
+def update_current_bid(db: Session, lot_id: str):
+    highest_bid = db.query(db_BidClass).filter(db_BidClass.lot_id == lot_id).order_by(db_BidClass.amount.desc()).first()
+    if highest_bid:
+        lot = db.query(db_LotClass).filter(db_LotClass.lot_id == lot_id).first()
+        if lot:
+            lot.current_winning_bid = highest_bid
 
 def get_lot(db: Session, lot_id: str):
     return db.query(db_LotClass).filter(db_LotClass.lot_id == lot_id).first()

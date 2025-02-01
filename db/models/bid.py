@@ -19,6 +19,7 @@ class Bid(Timestamp, Base):
 
 
     user = relationship("User", back_populates="bids")
+    lot = relationship("Lot", backref="bids")
 
 
 
