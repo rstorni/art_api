@@ -18,8 +18,8 @@ class Bid(Timestamp, Base):
     amount: Mapped[int] = mapped_column()
 
 
-    user = relationship("User", back_populates="bids")
-    lot = relationship("Lot", backref="bids")
+    user = relationship("User", back_populates="bids", foreign_keys=[user_id])
+    lot = relationship("Lot", backref="bids", foreign_keys=[lot_id])
 
 
 
